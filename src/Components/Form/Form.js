@@ -10,7 +10,7 @@ const form = (props) => {
                         <label for="fname">First Name</label>
                     </div>
                     <div className="col-75">
-                        <input type="text" id="fname" name="firstname" placeholder="Your Fist name.." />
+                        <input type="text" id="fname" name="firstname" placeholder="Your Fist name.." onChange={props.firstName}/>
                     </div>
                 </div>
                 <div className="row">
@@ -18,7 +18,7 @@ const form = (props) => {
                         <label for="fname">Last Name</label>
                     </div>
                     <div className="col-75">
-                        <input type="text" id="lname" name="lastname" placeholder="Your Last name.." />
+                        <input type="text" id="lname" name="lastname" placeholder="Your Last name.." onChange={props.lastName}/>
                     </div>
                 </div>
                 <div className="row">
@@ -26,10 +26,12 @@ const form = (props) => {
                         <label for="fname">Email</label>
                     </div>
                     <div className="col-75">
-                        <input type="text" id="email" name="email" placeholder="Your Email.." />
+                        <input type="text" id="email" name="email" placeholder="Your Email.." onChange={props.email} />
                     </div>
                 </div>
             </form>
+
+         
 
         </div>
     )
