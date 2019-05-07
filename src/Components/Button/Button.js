@@ -14,7 +14,8 @@ const button = (props) => {
 
     return (
         <div>
-             <button style={style}>{props.data}</button>
+             <button style={style}
+             onClick={props.action}>{props.data}</button>
         </div>
       
     )
