@@ -11,7 +11,7 @@
 
   #customers table {
       width: 100%;
-      padding: 16px;
+     
   }
   
   #customers tr:nth-child(even){background-color: #f2f2f2;}
@@ -24,4 +24,5 @@
     text-align: left;
     background-color: #4CAF50;
     color: white;
+    text-align: center
   }
