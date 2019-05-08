@@ -4,7 +4,6 @@ import Header from '../../Layout/Header/Header'
 import Axios from 'axios'
 import Button from '../../Components/Button/Button'
 import AddPage from '../../Components/AddPage/AddPage'
-import { thisExpression } from '@babel/types';
 
 class MainPage extends Component {
     state = {
@@ -16,11 +15,13 @@ class MainPage extends Component {
             email: ''
 
         },
-        initial: true
+        initial: true,
+        deleted : false,
+        addedCustomer: false
 
     }
     componentWillMount() {
-        Axios.get("http://localhost:8080/customer/all")
+        Axios.get("http://localhost:8080/api/customer")
             .then(response => {
                 console.log(response)
                 this.setState({
@@ -29,9 +30,6 @@ class MainPage extends Component {
             })
     }
 
-    componentDidUpdate() {
-
-    }
 
     addButtonHandler = () => {
         this.setState({
@@ -49,23 +47,36 @@ class MainPage extends Component {
 
     shouldComponentUpdate(nextProps, nextState) {
         if (nextState.page !== this.state.page) {
+            console.log("page changed, returning true")
             return true;
         } else if (this.state.initial) {
+            console.log("first Load, returning true")
             this.setState({
                 initial: false
             })
             return true
+        } else if(this.state.deleted){
+            console.log("deleted, returning true")
+            return true;
+        } else if(this.state.addedCustomer){
+            this.setState({
+                addedCustomer :false
+            })
+            return true;
         }
+        console.log(this.state.deleted +nextState.page+ this.state.page +" ,returning false")
+
 
         return false;
     }
     componentDidUpdate() {
         if (this.state.page === 'main') {
-            Axios.get("http://localhost:8080/customer/all")
+            Axios.get("http://localhost:8080/api/customer")
                 .then(response => {
                     console.log(response)
                     this.setState({
-                        data: response.data
+                        data: response.data,
+                        deleted: false
                     })
                 })
         }
@@ -73,10 +84,11 @@ class MainPage extends Component {
     }
 
     saveButtonHandler = () => {
-        Axios.post("http://localhost:8080/customer/add", this.state.input).then(response => {
+        Axios.post("http://localhost:8080/api/customer", this.state.input).then(response => {
             console.log(response)
             this.setState({
                 page: 'main',
+                addedCustomer: true
             })
         })
     }
@@ -117,6 +129,16 @@ class MainPage extends Component {
 
     }
 
+    deleteHandler = (id) => {
+        Axios.delete("http://localhost:8080/api/customer/"+id).then(response => {
+            console.log(response)
+            this.setState({
+                deleted: true,
+            })
+        })
+        
+    }
+
     render() {
         let page = null;
         if (this.state.page === 'main') {
@@ -127,7 +149,8 @@ class MainPage extends Component {
                 />
 
                 <Table
-                    data={this.state.data} />
+                    data={this.state.data}
+                    delete = {(id) => this.deleteHandler(id)} />
             </div>
         } else if (this.state.page === 'add') {
             page = <div>
