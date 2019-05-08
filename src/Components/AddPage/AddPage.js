@@ -12,7 +12,7 @@ const addPage = (props) => {
             />
 
             <button onClick={props.back}>Back</button>
-            <button>Save</button>
+            <button onClick={props.save}>Save</button>
 
 
         </div>

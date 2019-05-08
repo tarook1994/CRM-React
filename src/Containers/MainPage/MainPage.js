@@ -4,6 +4,7 @@ import Header from '../../Layout/Header/Header'
 import Axios from 'axios'
 import Button from '../../Components/Button/Button'
 import AddPage from '../../Components/AddPage/AddPage'
+import { thisExpression } from '@babel/types';
 
 class MainPage extends Component {
     state = {
@@ -14,7 +15,8 @@ class MainPage extends Component {
             lastName: '',
             email: ''
 
-        }
+        },
+        initial: true
 
     }
     componentWillMount() {
@@ -27,6 +29,10 @@ class MainPage extends Component {
             })
     }
 
+    componentDidUpdate() {
+
+    }
+
     addButtonHandler = () => {
         this.setState({
             page: 'add'
@@ -36,27 +42,64 @@ class MainPage extends Component {
 
     backButtonHandler = () => {
         this.setState({
-            page: 'main'
+            page: 'main',
+
         })
     }
 
-    saveButtonHandler = () => {
+    shouldComponentUpdate(nextProps, nextState) {
+        if (nextState.page !== this.state.page) {
+            return true;
+        } else if (this.state.initial) {
+            this.setState({
+                initial: false
+            })
+            return true
+        }
+
+        return false;
+    }
+    componentDidUpdate() {
+        if (this.state.page === 'main') {
+            Axios.get("http://localhost:8080/customer/all")
+                .then(response => {
+                    console.log(response)
+                    this.setState({
+                        data: response.data
+                    })
+                })
+        }
 
     }
+
+    saveButtonHandler = () => {
+        Axios.post("http://localhost:8080/customer/add", this.state.input).then(response => {
+            console.log(response)
+            this.setState({
+                page: 'main',
+            })
+        })
+    }
     firstNameHandler = (event) => {
-        const s = this.state
-        const newState = s
-        s.input.firstName = event.target.value;
+
         this.setState({
-            newState
+            ...this.state,
+            input: {
+                firstName: event.target.value,
+                lastName: this.state.input.lastName,
+                email: this.state.input.email
+            }
         })
 
     }
 
     lastNameHandler = (event) => {
         this.setState({
-            input : {
-                lastName : event.target.value
+            ...this.state,
+            input: {
+                firstName: this.state.input.firstName,
+                lastName: event.target.value,
+                email: this.state.input.email
             }
         })
 
@@ -64,8 +107,11 @@ class MainPage extends Component {
 
     emailHandler = (event) => {
         this.setState({
-            input : {
-                email : event.target.value
+            ...this.state,
+            input: {
+                firstName: this.state.input.firstName,
+                lastName: this.state.input.lastName,
+                email: event.target.value
             }
         })
 
@@ -87,6 +133,7 @@ class MainPage extends Component {
             page = <div>
                 <AddPage
                     back={this.backButtonHandler}
+                    save={this.saveButtonHandler}
                     firstName={(event) => this.firstNameHandler(event)}
                     lastName={(event) => this.lastNameHandler(event)}
                     email={(event) => this.emailHandler(event)}
