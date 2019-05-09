@@ -4,14 +4,14 @@ import "./Table.css"
 const table = (props) => {
     let view = <h1>Loading</h1>
     if(props.data != null) {
-        view = props.data.map(item => (
+        view = props.data.map((item,index) => (
             <tr Ahmed>
               <td>{item.id}</td>
               <td>{item.firstName}</td>
               <td>{item.lastName}</td>
               <td>{item.email}</td>
               <td>
-                  <button>Update</button>
+                  <button onClick = {() => props.update(index)}>Update</button>
                   <button onClick= {()=>props.delete(item.id)}>Delete</button>
               </td>
             </tr>

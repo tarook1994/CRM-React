@@ -15,8 +15,9 @@ class MainPage extends Component {
             email: ''
 
         },
+        updating: null,
         initial: true,
-        deleted : false,
+        deleted: false,
         addedCustomer: false
 
     }
@@ -55,16 +56,16 @@ class MainPage extends Component {
                 initial: false
             })
             return true
-        } else if(this.state.deleted){
+        } else if (this.state.deleted) {
             console.log("deleted, returning true")
             return true;
-        } else if(this.state.addedCustomer){
+        } else if (this.state.addedCustomer) {
             this.setState({
-                addedCustomer :false
+                addedCustomer: false
             })
             return true;
         }
-        console.log(this.state.deleted +nextState.page+ this.state.page +" ,returning false")
+        console.log(this.state.deleted + nextState.page + this.state.page + " ,returning false")
 
 
         return false;
@@ -128,15 +129,32 @@ class MainPage extends Component {
         })
 
     }
+    getCustomerList = () => {
+        Axios.get("http://localhost:8080/api/customer")
+            .then(response => {
+                console.log(response)
+                this.setState({
+                    data: response.data
+                })
+            })
+    }
 
     deleteHandler = (id) => {
-        Axios.delete("http://localhost:8080/api/customer/"+id).then(response => {
+        Axios.delete("http://localhost:8080/api/customer/" + id).then(response => {
             console.log(response)
             this.setState({
                 deleted: true,
             })
+            this.getCustomerList();
         })
-        
+
+    }
+
+    updateHandler = (index) => {
+        this.setState({
+            page: 'update',
+            updating: index
+        })
     }
 
     render() {
@@ -150,17 +168,30 @@ class MainPage extends Component {
 
                 <Table
                     data={this.state.data}
-                    delete = {(id) => this.deleteHandler(id)} />
+                    delete={(id) => this.deleteHandler(id)}
+                    update={(index) => this.updateHandler(index)} />
             </div>
         } else if (this.state.page === 'add') {
             page = <div>
                 <AddPage
                     back={this.backButtonHandler}
-                    save={this.saveButtonHandler}
+                    save={(type) => this.saveButtonHandler(type)}
                     firstName={(event) => this.firstNameHandler(event)}
                     lastName={(event) => this.lastNameHandler(event)}
                     email={(event) => this.emailHandler(event)}
                 />
+            </div>
+        } else {
+            page = <div>
+                <Button type='add'
+                    data='Add Customer'
+                    action={this.addButtonHandler}
+                />
+
+                <Table
+                    data={this.state.data}
+                    delete={(id) => this.deleteHandler(id)}
+                    update={(index) => this.updateHandler(index)} />
             </div>
         }
         return (
