@@ -4,6 +4,7 @@ import Header from '../../Layout/Header/Header'
 import Axios from 'axios'
 import Button from '../../Components/Button/Button'
 import AddPage from '../../Components/AddPage/AddPage'
+import isEqual from 'react-fast-compare'
 
 class MainPage extends Component {
     state = {
@@ -59,12 +60,21 @@ class MainPage extends Component {
         } else if (this.state.deleted) {
             console.log("deleted, returning true")
             return true;
-        } else if (this.state.addedCustomer) {
-            this.setState({
-                addedCustomer: false
-            })
+        } else if(!isEqual(this.state.data, nextState.data)){
+            console.log(this.state.data)
+            console.log(nextState.data)
             return true;
+        } else {
+            return false
         }
+        // } else if (this.state.addedCustomer) {
+        //     this.setState({
+        //         addedCustomer: false
+        //     })
+        //     return true;
+        // } else if(this.state.updating){
+        //     return true;
+        // }
         console.log(this.state.deleted + nextState.page + this.state.page + " ,returning false")
 
 
@@ -91,6 +101,7 @@ class MainPage extends Component {
                 page: 'main',
                 addedCustomer: true
             })
+            this.getCustomerList()
         })
     }
     firstNameHandler = (event) => {
@@ -157,6 +168,16 @@ class MainPage extends Component {
         })
     }
 
+    sendUpdateToDatabase = () => {
+        Axios.put("http://localhost:8080/api/customer/" + this.state.data[this.state.updating].id, this.state.input).then(response => {
+            console.log(response)
+            this.setState({
+                page: 'main',
+                updating: null
+            })  
+        })
+    }
+
     render() {
         let page = null;
         if (this.state.page === 'main') {
@@ -175,7 +196,7 @@ class MainPage extends Component {
             page = <div>
                 <AddPage
                     back={this.backButtonHandler}
-                    save={(type) => this.saveButtonHandler(type)}
+                    save={this.saveButtonHandler}
                     firstName={(event) => this.firstNameHandler(event)}
                     lastName={(event) => this.lastNameHandler(event)}
                     email={(event) => this.emailHandler(event)}
@@ -183,15 +204,13 @@ class MainPage extends Component {
             </div>
         } else {
             page = <div>
-                <Button type='add'
-                    data='Add Customer'
-                    action={this.addButtonHandler}
+                <AddPage
+                    back={this.backButtonHandler}
+                    update={this.sendUpdateToDatabase}
+                    firstName={(event) => this.firstNameHandler(event)}
+                    lastName={(event) => this.lastNameHandler(event)}
+                    email={(event) => this.emailHandler(event)}
                 />
-
-                <Table
-                    data={this.state.data}
-                    delete={(id) => this.deleteHandler(id)}
-                    update={(index) => this.updateHandler(index)} />
             </div>
         }
         return (

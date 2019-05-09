@@ -2,6 +2,12 @@ import React from 'react';
 import Form from '../Form/Form'
 import Button from '../Button/Button'
 const addPage = (props) => {
+    let buttonType= null;
+    if(props.update){
+        buttonType =  <button onClick={props.update}>Update</button>
+    } else {
+        buttonType =  <button onClick={props.save}>Save</button>
+    }
     return (
         <div>
             <p>Add Customer</p>
@@ -12,7 +18,7 @@ const addPage = (props) => {
             />
 
             <button onClick={props.back}>Back</button>
-            <button onClick={props.save}>Save</button>
+            {buttonType}
 
 
         </div>
