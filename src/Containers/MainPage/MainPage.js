@@ -5,6 +5,7 @@ import Axios from 'axios'
 import Button from '../../Components/Button/Button'
 import AddPage from '../../Components/AddPage/AddPage'
 import isEqual from 'react-fast-compare'
+import Login from '../Login/Login'
 
 class MainPage extends Component {
     state = {
@@ -215,8 +216,9 @@ class MainPage extends Component {
         }
         return (
             <div >
-                <Header />
-                {page}
+                {/* <Header /> */}
+                {/* {page} */}
+                <Login/>
             </div>
         )
     }
