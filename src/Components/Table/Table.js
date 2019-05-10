@@ -12,7 +12,7 @@ const table = (props) => {
               <td>{item.email}</td>
               <td>
                   <button onClick = {() => props.update(index)}>Update</button>
-                  <button onClick= {()=>props.delete(item.id)}>Delete</button>
+                  <button id="delete" onClick= {()=>props.delete(item.id)}>Delete</button>
               </td>
             </tr>
           ))

@@ -1,15 +1,16 @@
 import React from 'react';
 import Form from '../Form/Form'
 import Button from '../Button/Button'
+import './AddPage.css'
 const addPage = (props) => {
     let buttonType= null;
     if(props.update){
-        buttonType =  <button onClick={props.update}>Update</button>
+        buttonType =  <button  onClick={props.update}>Update</button>
     } else {
-        buttonType =  <button onClick={props.save}>Save</button>
+        buttonType =  <button  onClick={props.save}>Save</button>
     }
     return (
-        <div>
+        <div id="add-container-div">
             <p>Add Customer</p>
             <Form back={props.back}
             firstName = {props.firstName}

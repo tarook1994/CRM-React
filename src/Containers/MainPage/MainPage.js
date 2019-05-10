@@ -216,9 +216,9 @@ class MainPage extends Component {
         }
         return (
             <div >
-                {/* <Header /> */}
-                {/* {page} */}
-                <Login/>
+                <Header />
+                {page}
+                {/* <Login/> */}
             </div>
         )
     }
