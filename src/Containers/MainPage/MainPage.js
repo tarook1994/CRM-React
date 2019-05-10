@@ -6,6 +6,7 @@ import Button from '../../Components/Button/Button'
 import AddPage from '../../Components/AddPage/AddPage'
 import isEqual from 'react-fast-compare'
 import Login from '../Login/Login'
+import NavBar from '../../Layout/NavigationBar/NavigationBar'
 
 class MainPage extends Component {
     state = {
@@ -61,7 +62,7 @@ class MainPage extends Component {
         } else if (this.state.deleted) {
             console.log("deleted, returning true")
             return true;
-        } else if(!isEqual(this.state.data, nextState.data)){
+        } else if (!isEqual(this.state.data, nextState.data)) {
             console.log(this.state.data)
             console.log(nextState.data)
             return true;
@@ -175,7 +176,7 @@ class MainPage extends Component {
             this.setState({
                 page: 'main',
                 updating: null
-            })  
+            })
         })
     }
 
@@ -216,8 +217,14 @@ class MainPage extends Component {
         }
         return (
             <div >
-                <Header />
-                {page}
+                <NavBar />
+                <div style={{
+                    padding : '24px'
+                }}>
+                    <Header />
+                    {page}
+                </div>
+
                 {/* <Login/> */}
             </div>
         )
