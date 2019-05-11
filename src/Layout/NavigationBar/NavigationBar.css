@@ -3,6 +3,8 @@
     background-color: #555;
     overflow: auto;
     margin-bottom: 24px;
+    position: fixed;
+    z-index: 1;
 }
 
 .nav-container a {

@@ -77,7 +77,7 @@ class MainPage extends Component {
         // } else if(this.state.updating){
         //     return true;
         // }
-        console.log(this.state.deleted + nextState.page + this.state.page + " ,returning false")
+        // console.log(this.state.deleted + nextState.page + this.state.page + " ,returning false")
 
 
         return false;
@@ -142,6 +142,18 @@ class MainPage extends Component {
         })
 
     }
+
+    loginNavBarHandler = () => {
+        this.setState({
+            page: 'login'
+        })
+    }
+
+    homeNavBarHandler = () => {
+        this.setState({
+            page: 'main'
+        })
+    }
     getCustomerList = () => {
         Axios.get("http://localhost:8080/api/customer")
             .then(response => {
@@ -184,6 +196,7 @@ class MainPage extends Component {
         let page = null;
         if (this.state.page === 'main') {
             page = <div>
+                <Header />
                 <Button type='add'
                     data='Add Customer'
                     action={this.addButtonHandler}
@@ -196,6 +209,7 @@ class MainPage extends Component {
             </div>
         } else if (this.state.page === 'add') {
             page = <div>
+                <Header />
                 <AddPage
                     back={this.backButtonHandler}
                     save={this.saveButtonHandler}
@@ -204,8 +218,9 @@ class MainPage extends Component {
                     email={(event) => this.emailHandler(event)}
                 />
             </div>
-        } else {
+        } else if (this.state.page === 'update') {
             page = <div>
+                <Header/>
                 <AddPage
                     back={this.backButtonHandler}
                     update={this.sendUpdateToDatabase}
@@ -214,14 +229,18 @@ class MainPage extends Component {
                     email={(event) => this.emailHandler(event)}
                 />
             </div>
+        } else if (this.state.page === 'login'){
+            page = <Login/>
         }
         return (
             <div >
-                <NavBar />
+                <NavBar 
+                login = {this.loginNavBarHandler}
+                home = {this.homeNavBarHandler} />
                 <div style={{
                     padding : '24px'
                 }}>
-                    <Header />
+                    
                     {page}
                 </div>
 

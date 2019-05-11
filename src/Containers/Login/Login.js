@@ -1,8 +1,44 @@
 import React, { Component } from 'react';
-import { defaultCipherList } from 'constants';
 import './Login.css'
+import Firebase from "firebase";
+import 'firebase/auth';
+
+const config = {
+    apiKey: "AIzaSyB8wHa2o_WyiF5Kawkn64DrDHhSHMZDKYo",
+    authDomain: "bwish-926d0.firebaseapp.com",
+    databaseURL: "https://bwish-926d0.firebaseio.com",
+    projectId: "bwish-926d0",
+    storageBucket: "bwish-926d0.appspot.com",
+    messagingSenderId: "120094261556",
+    appId: "1:120094261556:web:a62412640ec1e849"
+};
 
 class Login extends Component {
+    state = {
+        email : 'ahmed-tarek944@hotmail.com',
+        password : '123456'
+    }
+
+   
+   constructor(){
+        super()
+        Firebase.initializeApp(config);
+        this.auth = Firebase.auth();
+      
+   
+
+   }
+
+   submit = () => {
+       this.auth.signInWithEmailAndPassword(this.state.email,this.state.password)
+       .then(response => {
+           console.log(response)
+       })
+       .catch(error => {
+           console.log(error.message)
+       })
+   }
+
 
     render() {
 
@@ -10,7 +46,7 @@ class Login extends Component {
             <div className="limiter">
                 <div className="container-login100">
                     <div className="wrap-login100">
-                        <form className="login100-form validate-form p-l-55 p-r-55 p-t-178">
+                        <form className="login100-form validate-form p-l-55 p-r-55 p-t-178" >
                             <span className="login100-form-title">
                                 Sign In
                         </span>
@@ -36,7 +72,7 @@ class Login extends Component {
                             </div>
 
                             <div className="container-login100-form-btn">
-                                <button className="login100-form-btn">
+                                <button className="login100-form-btn" type = "button" onClick = {this.submit}>
                                     Sign in
                             </button>
                             </div>
