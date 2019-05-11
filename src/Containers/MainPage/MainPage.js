@@ -7,6 +7,18 @@ import AddPage from '../../Components/AddPage/AddPage'
 import isEqual from 'react-fast-compare'
 import Login from '../Login/Login'
 import NavBar from '../../Layout/NavigationBar/NavigationBar'
+import Firebase from "firebase";
+import 'firebase/auth';
+
+const config = {
+    apiKey: "AIzaSyB8wHa2o_WyiF5Kawkn64DrDHhSHMZDKYo",
+    authDomain: "bwish-926d0.firebaseapp.com",
+    databaseURL: "https://bwish-926d0.firebaseio.com",
+    projectId: "bwish-926d0",
+    storageBucket: "bwish-926d0.appspot.com",
+    messagingSenderId: "120094261556",
+    appId: "1:120094261556:web:a62412640ec1e849"
+};
 
 class MainPage extends Component {
     state = {
@@ -24,6 +36,16 @@ class MainPage extends Component {
         addedCustomer: false
 
     }
+    constructor(){
+        super()
+        try {
+            Firebase.initializeApp(config);
+            this.auth = Firebase.auth();
+        } catch(error) {
+            console.log(error)
+        }
+        
+   }
     componentWillMount() {
         Axios.get("http://localhost:8080/api/customer")
             .then(response => {
@@ -192,6 +214,16 @@ class MainPage extends Component {
         })
     }
 
+    signInHanlder = (email, password) => {
+        this.auth.signInWithEmailAndPassword(email, password)
+        .then(response => {
+            console.log(response)
+        })
+        .catch(error => {
+            console.log(error)
+        })
+    }
+
     render() {
         let page = null;
         if (this.state.page === 'main') {
@@ -230,7 +262,7 @@ class MainPage extends Component {
                 />
             </div>
         } else if (this.state.page === 'login'){
-            page = <Login/>
+            page = <Login submit = {(email, password) => this.signInHanlder(email,password)}/>
         }
         return (
             <div >

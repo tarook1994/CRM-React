@@ -1,46 +1,53 @@
 import React, { Component } from 'react';
 import './Login.css'
-import Firebase from "firebase";
-import 'firebase/auth';
+import { throwStatement } from '@babel/types';
 
-const config = {
-    apiKey: "AIzaSyB8wHa2o_WyiF5Kawkn64DrDHhSHMZDKYo",
-    authDomain: "bwish-926d0.firebaseapp.com",
-    databaseURL: "https://bwish-926d0.firebaseio.com",
-    projectId: "bwish-926d0",
-    storageBucket: "bwish-926d0.appspot.com",
-    messagingSenderId: "120094261556",
-    appId: "1:120094261556:web:a62412640ec1e849"
-};
 
 class Login extends Component {
     state = {
-        email : 'ahmed-tarek944@hotmail.com',
-        password : '123456'
+        email : '',
+        password : '',
+        error : null
     }
 
-   
-   constructor(){
-        super()
-        Firebase.initializeApp(config);
-        this.auth = Firebase.auth();
-      
-   
+    emailHandler = (event) => {
+        this.setState({
+            email : event.target.value
+        })
+    }
 
-   }
+    passwordHandler = (event) => {
+        this.setState({
+            password : event.target.value
+        })
+    }
 
-   submit = () => {
-       this.auth.signInWithEmailAndPassword(this.state.email,this.state.password)
-       .then(response => {
-           console.log(response)
-       })
-       .catch(error => {
-           console.log(error.message)
-       })
-   }
+    emailPasswordValidator = (email,password) => {
+        if(email.includes('@') && email.includes('.')){
+            if(password.length>5){
+                this.setState({
+                    error : null
+                })
+                this.props.submit(email,password)
+            } else {
+                this.setState({
+                    error : 'password'
+                })
+            }
+        } else {
+            this.setState({
+                error : 'email'
+            })
+        }
+    }
 
 
     render() {
+        let error = <p></p>
+        if(this.state.error){
+           error = this.state.error==='email'? <p>Please enter a valid email</p> :
+           <p>Please enter a password with at least 6 character</p>
+        }
 
         return (
             <div className="limiter">
@@ -50,14 +57,15 @@ class Login extends Component {
                             <span className="login100-form-title">
                                 Sign In
                         </span>
+                        {error}
 
                             <div className="wrap-input100 validate-input m-b-16" data-validate="Please enter username">
-                                <input className="input100" type="text" name="username" placeholder="Username" />
+                                <input className="input100" type="text" name="email" placeholder="Email" onChange={this.emailHandler}/>
                                 <span className="focus-input100"></span>
                             </div>
 
                             <div className="wrap-input100 validate-input" data-validate="Please enter password">
-                                <input className="input100" type="password" name="pass" placeholder="Password" />
+                                <input className="input100" type="password" name="pass" placeholder="Password" onChange={this.passwordHandler}/>
                                 <span className="focus-input100"></span>
                             </div>
 
@@ -72,7 +80,8 @@ class Login extends Component {
                             </div>
 
                             <div className="container-login100-form-btn">
-                                <button className="login100-form-btn" type = "button" onClick = {this.submit}>
+                                <button className="login100-form-btn" type = "button"
+                                 onClick = {()=>this.emailPasswordValidator(this.state.email, this.state.password)}>
                                     Sign in
                             </button>
                             </div>

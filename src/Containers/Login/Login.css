@@ -63,12 +63,14 @@
       margin: 0px;
   }
   
-  p {
+  form > p {
       font-family: Ubuntu-Regular;
-      font-size: 14px;
+      font-size: 16px;
+      min-height: 16px;
       line-height: 1.7;
-      color: #666666;
+      color: #ff2020;
       margin: 0px;
+      padding: 6px;
   }
   
   ul, li {
@@ -184,6 +186,7 @@
     background: #fff;
     border-radius: 20px;
     overflow: hidden;
+    margin-top: 8px;
     box-shadow: 0 3px 20px 0px rgba(0, 0, 0, 0.1);
     -moz-box-shadow: 0 3px 20px 0px rgba(0, 0, 0, 0.1);
     -webkit-box-shadow: 0 3px 20px 0px rgba(0, 0, 0, 0.1);
@@ -198,6 +201,7 @@
   .login100-form {
     width: 100%;
     position: relative;
+    
   }
   
   .login100-form-title {
