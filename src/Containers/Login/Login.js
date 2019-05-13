@@ -9,7 +9,13 @@ class Login extends Component {
         email: '',
         password: '',
         error: null,
-        showPopup: 'false'
+        showPopup: false
+    }
+
+    componentDidMount(){
+        this.setState({
+            showPopup : true
+        })
     }
 
     emailHandler = (event) => {
@@ -51,7 +57,7 @@ class Login extends Component {
                 <p>Please enter a password with at least 6 character</p>
         }
         let popup = null
-        if (this.state.showPopup===true) {
+        if (this.state.showPopup) {
             popup = <Popup />
         }
 

@@ -33,7 +33,8 @@ class MainPage extends Component {
         updating: null,
         initial: true,
         deleted: false,
-        addedCustomer: false
+        addedCustomer: false,
+        errorMessage : null
 
     }
     constructor(){
@@ -42,6 +43,7 @@ class MainPage extends Component {
             Firebase.initializeApp(config);
             this.auth = Firebase.auth();
         } catch(error) {
+           
             console.log(error)
         }
         
@@ -85,11 +87,12 @@ class MainPage extends Component {
             console.log("deleted, returning true")
             return true;
         } else if (!isEqual(this.state.data, nextState.data)) {
-            console.log(this.state.data)
-            console.log(nextState.data)
+        
             return true;
+        } else if(this.state.errorMessage!= nextState.errorMessage){
+            return true
         } else {
-            return false
+            return false;
         }
         // } else if (this.state.addedCustomer) {
         //     this.setState({
@@ -220,6 +223,9 @@ class MainPage extends Component {
             console.log(response)
         })
         .catch(error => {
+            this.setState({
+                errorMessage : error.message
+            })
             console.log(error)
         })
     }
@@ -262,7 +268,8 @@ class MainPage extends Component {
                 />
             </div>
         } else if (this.state.page === 'login'){
-            page = <Login submit = {(email, password) => this.signInHanlder(email,password)}/>
+            page = <Login submit = {(email, password) => this.signInHanlder(email,password)}
+                           error  = {this.state.errorMessage}/>
         }
         return (
             <div >
@@ -270,7 +277,7 @@ class MainPage extends Component {
                 login = {this.loginNavBarHandler}
                 home = {this.homeNavBarHandler} />
                 <div style={{
-                    padding : '24px'
+                    paddingTop : '24px'
                 }}>
                     
                     {page}
