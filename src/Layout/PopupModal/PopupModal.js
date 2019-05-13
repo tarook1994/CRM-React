@@ -6,7 +6,7 @@ const popup = (props) => {
         <div className="hover_bkgr_fricc">
             <span className="helper"></span>
             <div>
-                <p>Add any HTML content<br />inside the popup box!</p>
+                <p>{props.message}</p>
             </div>
         </div>
     )
