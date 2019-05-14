@@ -3,7 +3,7 @@ import './PopupModal.css'
 
 const popup = (props) => {
     return (
-        <div className="hover_bkgr_fricc">
+        <div className="hover_bkgr_fricc" onClick={props.removePopup}>
             <span className="helper"></span>
             <div>
                 <p>{props.message}</p>

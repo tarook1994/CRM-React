@@ -8,6 +8,7 @@ import isEqual from 'react-fast-compare'
 import Login from '../Login/Login'
 import NavBar from '../../Layout/NavigationBar/NavigationBar'
 import Firebase from "firebase";
+import Popup from '../../Layout/PopupModal/PopupModal'
 import 'firebase/auth';
 
 const config = {
@@ -33,21 +34,21 @@ class MainPage extends Component {
         updating: null,
         initial: true,
         deleted: false,
+        Autherror: false,
         addedCustomer: false,
-        errorMessage : null
-
+        errorMessage: null
     }
-    constructor(){
+    constructor() {
         super()
         try {
             Firebase.initializeApp(config);
             this.auth = Firebase.auth();
-        } catch(error) {
-           
+        } catch (error) {
+
             console.log(error)
         }
-        
-   }
+
+    }
     componentWillMount() {
         Axios.get("http://localhost:8080/api/customer")
             .then(response => {
@@ -87,9 +88,9 @@ class MainPage extends Component {
             console.log("deleted, returning true")
             return true;
         } else if (!isEqual(this.state.data, nextState.data)) {
-        
+
             return true;
-        } else if(this.state.errorMessage!= nextState.errorMessage){
+        } else if (this.state.errorMessage != nextState.errorMessage) {
             return true
         } else {
             return false;
@@ -219,15 +220,16 @@ class MainPage extends Component {
 
     signInHanlder = (email, password) => {
         this.auth.signInWithEmailAndPassword(email, password)
-        .then(response => {
-            console.log(response)
-        })
-        .catch(error => {
-            this.setState({
-                errorMessage : error.message
+            .then(response => {
+                console.log(response)
+
             })
-            console.log(error)
-        })
+            .catch(error => {
+                this.setState({
+                    errorMessage: error.message
+                })
+                console.log(error)
+            })
     }
 
     render() {
@@ -258,7 +260,7 @@ class MainPage extends Component {
             </div>
         } else if (this.state.page === 'update') {
             page = <div>
-                <Header/>
+                <Header />
                 <AddPage
                     back={this.backButtonHandler}
                     update={this.sendUpdateToDatabase}
@@ -267,27 +269,39 @@ class MainPage extends Component {
                     email={(event) => this.emailHandler(event)}
                 />
             </div>
-        } else if (this.state.page === 'login'){
-            page = <Login submit = {(email, password) => this.signInHanlder(email,password)}
-                           error  = {this.state.errorMessage}/>
-        }
-        return (
-            <div >
-                <NavBar 
-                login = {this.loginNavBarHandler}
-                home = {this.homeNavBarHandler} />
-                <div style={{
-                    paddingTop : '24px'
-                }}>
-                    
-                    {page}
+        } else if (this.state.page === 'login') {
+            if (this.state.Autherror) {
+                page = <div>
+                    <Popup />
+                    <Login submit={(email, password) => this.signInHanlder(email, password)}
+                        error={this.state.errorMessage}
+                    />
                 </div>
 
-                {/* <Login/> */}
-            </div>
-        )
-    }
+            } else {
+                page = 
+                    <Login submit={(email, password) => this.signInHanlder(email, password)}
+                        error={this.state.errorMessage}
+                    />
+                    }
+        
+                }
+                return (
+            <div >
+                        <NavBar
+                            login={this.loginNavBarHandler}
+                            home={this.homeNavBarHandler} />
+                        <div style={{
+                            paddingTop: '24px'
+                        }}>
+                            {page}
+                        </div>
 
-}
-
+                        {/* <Login/> */}
+                    </div>
+                    )
+                }
+            
+            }
+            
 export default MainPage;
