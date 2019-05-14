@@ -95,16 +95,6 @@ class MainPage extends Component {
         } else {
             return false;
         }
-        // } else if (this.state.addedCustomer) {
-        //     this.setState({
-        //         addedCustomer: false
-        //     })
-        //     return true;
-        // } else if(this.state.updating){
-        //     return true;
-        // }
-        // console.log(this.state.deleted + nextState.page + this.state.page + " ,returning false")
-
 
         return false;
     }
@@ -226,10 +216,20 @@ class MainPage extends Component {
             })
             .catch(error => {
                 this.setState({
-                    errorMessage: error.message
+                    errorMessage: error.message,
+                    Autherror: true
                 })
                 console.log(error)
             })
+    }
+
+    removePopup = () => {
+        this.setState({
+            Autherror: false,
+            errorMessage: null
+
+        })
+
     }
 
     render() {
@@ -270,38 +270,37 @@ class MainPage extends Component {
                 />
             </div>
         } else if (this.state.page === 'login') {
-            if (this.state.Autherror) {
-                page = <div>
-                    <Popup />
-                    <Login submit={(email, password) => this.signInHanlder(email, password)}
-                        error={this.state.errorMessage}
-                    />
+            const popup = this.state.Autherror ? <Popup
+                remove={this.removePopup}
+                message = {this.state.errorMessage}
+            /> : null
+            page = <div>
+                {popup}
+                <Login submit={(email, password) => this.signInHanlder(email, password)}
+                    error={this.state.errorMessage}
+                />
+            </div>
+
+
+
+        }
+
+        return (
+            <div >
+                <NavBar
+                    login={this.loginNavBarHandler}
+                    home={this.homeNavBarHandler} />
+                <div style={{
+                    paddingTop: '24px'
+                }}>
+                    {page}
                 </div>
 
-            } else {
-                page = 
-                    <Login submit={(email, password) => this.signInHanlder(email, password)}
-                        error={this.state.errorMessage}
-                    />
-                    }
-        
-                }
-                return (
-            <div >
-                        <NavBar
-                            login={this.loginNavBarHandler}
-                            home={this.homeNavBarHandler} />
-                        <div style={{
-                            paddingTop: '24px'
-                        }}>
-                            {page}
-                        </div>
+                {/* <Login/> */}
+            </div>
+        )
+    }
 
-                        {/* <Login/> */}
-                    </div>
-                    )
-                }
-            
-            }
-            
+}
+
 export default MainPage;

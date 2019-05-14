@@ -9,23 +9,8 @@ class Login extends Component {
         email: '',
         password: '',
         error: null,
-        showPopup: false,
-        errorAgain : false,
-        backClicked: false
+      
     }
-
-    componentDidUpdate(prevProps) {
-        if(this.props.error) {
-            if (prevProps.error !== this.props.error) {
-                this.setState({
-                    errorAgain: true
-                })
-            }
-        }
-       
-    }
-
-
 
     emailHandler = (event) => {
         this.setState({
@@ -38,14 +23,7 @@ class Login extends Component {
             password: event.target.value
         })
     }
-    removePopup = () => {
-        this.setState({
-            showPopup: false,
-            backClicked : true
-
-        })
-
-    }
+   
 
     emailPasswordValidator = (email, password) => {
         if (email.includes('@') && email.includes('.')) {
@@ -73,31 +51,16 @@ class Login extends Component {
 
     render() {
 
-        if (this.props.error) {
-            if (!this.state.showPopup && !this.state.backClicked) {
-                this.setState({
-                    showPopup: true,
-                    backClicked : true
-                })
-            }
-
-        }
+        
 
         let error = <p></p>
         if (this.state.error) {
             error = this.state.error === 'email' ? <p>Please enter a valid email</p> :
                 <p>Please enter a password with at least 6 character</p>
         }
-        let popup = null
-        if (this.state.showPopup) {
-            popup = <Popup
-                message={this.props.error}
-                removePopup={this.removePopup} />
-        }
-
+      
         return (
             <React.Fragment>
-                {popup}
                 <div className="limiter">
                     <div className="container-login100">
                         <div className="wrap-login100">
