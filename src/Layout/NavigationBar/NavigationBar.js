@@ -6,7 +6,7 @@ const navBar = (props) => {
         <div className="nav-container">
             <a onClick= {props.home} className="active">Home</a>
             <a onClick= {props.login}>Sign in</a>
-            <a>Sign up</a>
+            <a onClick = {props.about}>About</a>
         </div>
     )
 }

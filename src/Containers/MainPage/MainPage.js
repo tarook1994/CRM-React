@@ -159,6 +159,12 @@ class MainPage extends Component {
 
     }
 
+    AboutNavBarHandler = () => {
+        this.setState({
+            page: 'about'
+        })
+    }
+
     loginNavBarHandler = () => {
         this.setState({
             page: 'login'
@@ -283,13 +289,18 @@ class MainPage extends Component {
 
 
 
+        } else if (this.state.page === 'about'){
+            page = <Popup
+            isAbout = {true}
+             />
         }
 
         return (
             <div >
                 <NavBar
                     login={this.loginNavBarHandler}
-                    home={this.homeNavBarHandler} />
+                    home={this.homeNavBarHandler} 
+                    about = {this.AboutNavBarHandler}/>
                 <div style={{
                     paddingTop: '24px'
                 }}>
