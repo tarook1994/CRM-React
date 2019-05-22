@@ -104,6 +104,7 @@
   .img-class { 
       height: 35px;
       width:  35px;
+      margin-left: 10px;
       border-radius: 50%;
   }
   img {
