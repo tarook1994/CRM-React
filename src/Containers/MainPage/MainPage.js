@@ -36,7 +36,8 @@ class MainPage extends Component {
         deleted: false,
         Autherror: false,
         addedCustomer: false,
-        errorMessage: null
+        errorMessage: null,
+        showPopup : false
     }
     constructor() {
         super()
@@ -92,6 +93,8 @@ class MainPage extends Component {
             return true;
         } else if (this.state.errorMessage != nextState.errorMessage) {
             return true
+        } else if(nextState.showPopup != this.state.showPopup){
+            return true;
         } else {
             return false;
         }
@@ -160,8 +163,15 @@ class MainPage extends Component {
     }
 
     AboutNavBarHandler = () => {
+        console.log("setting to true")
         this.setState({
-            page: 'about'
+            showPopup: true
+        })
+    }
+
+    removeHandler = () => {
+        this.setState({
+            showPopup: false
         })
     }
 
@@ -287,14 +297,16 @@ class MainPage extends Component {
                 />
             </div>
 
-
-
-        } else if (this.state.page === 'about'){
-            page = <Popup
+        } 
+        
+        let popup = null
+        if (this.state.showPopup === true){
+             popup = <Popup
             isAbout = {true}
+            remove = {this.removeHandler}
              />
-        }
 
+        } 
         return (
             <div >
                 <NavBar
@@ -304,6 +316,7 @@ class MainPage extends Component {
                 <div style={{
                     paddingTop: '24px'
                 }}>
+                    {popup}
                     {page}
                 </div>
 
